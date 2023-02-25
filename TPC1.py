@@ -1,3 +1,6 @@
+
+
+
 def armazena():
 
     lista = []
@@ -23,8 +26,6 @@ def armazena():
 
     return lista
 
-lista = armazena()
-
 
 
 def diseasePerSex(lista):
@@ -45,59 +46,123 @@ def diseasePerSex(lista):
 
     return dist
                  
-dist = diseasePerSex(lista)
 
-print("A doença está presente em {:.2f}% de homens e em {:.2f}% de mulheres".format(dist,1-dist))
+
+
 
 
 def diseasePerTier(lista):
-    stat1 = 0
-    stat2 = 0
-    stat3 = 0
-    stat4 = 0
-    stat5 = 0
-    stat6 = 0
-    stat7 = 0
-    stat8 = 0
-    stat9 = 0
-    stat10 = 0
-    stat11 = 0
-    stat12 = 0
+    escaloes = [0]*12
     total = 0
 
     for d1 in lista:
         if d1["temDoenÃ§a"] == 1:
-            total = total + 1
+            total += 1
             if d1["idade"] in range(29,35):
-                stat1 = stat1 + 1
+                escaloes[0] += 1
             elif d1["idade"] in range(34,40):
-                stat2 = stat2 + 1
+                escaloes[1] += 1
             elif d1["idade"] in range(39,45):
-                stat3 = stat3 + 1
+                escaloes[2] += 1
             elif d1["idade"] in range(44,50):
-                stat4 = stat4 + 1
+                escaloes[3] += 1
             elif d1["idade"] in range(49,55):
-                stat5 = stat5 + 1
+                escaloes[4] += 1
             elif d1["idade"] in range(54,60):
-                stat6 = stat6 + 1
+                escaloes[5] += 1
             elif d1["idade"] in range(59,65):
-                stat7 = stat7 + 1
+                escaloes[6] += 1
             elif d1["idade"] in range(64,70):
-                stat8 = stat8 + 1
+                escaloes[7] += 1
             elif d1["idade"] in range(69,75):
-                stat9 = stat9 + 1
+                escaloes[8] += 1
             elif d1["idade"] in range(74,80):
-                stat10 = stat10 + 1
+                escaloes[9] += 1
             elif d1["idade"] in range(79,85):
-                stat11 = stat11 + 1
+                escaloes[10] += 1
             elif d1["idade"] in range(84,90):
-                stat12 = stat12 + 1
+                escaloes[11] += 1
     
-    print("A distribuição de doença nas diferentes faixas etárias foi: {:.2f}%, {:.2f}%, {:.2f}%, {:.2f}%, {:.2f}%, {:.2f}%, {:.2f}%, {:.2f}%, {:.2f}%, {:.2f}%, {:.2f}%, {:.2f}%".format(stat1/total,stat2/total,stat3/total,stat4/total,stat5/total,stat6/total,stat7/total,stat8/total,stat9/total,stat10/total,stat11/total,stat12/total))
 
-    return this
-
-this= diseasePerTier(lista)
+    return total,escaloes
 
 
 
+def diseasePerCholes(lista,total):
+
+    dic1 = []
+    
+    for minimo in range(0,500,10):
+        count = 0
+        for i,d1 in enumerate(lista):
+            if d1["temDoenÃ§a"] == 1 and minimo < d1["colesterol"] < minimo + 10:
+                count+=1
+        dic1.append(count/total)
+    return dic1
+    
+                
+
+def print_percentagem_sexo(dist):
+    
+
+    print("+------------------+--------------------+")
+    print("|    Genero        |    Percentagem    |")
+    print("+------------------+--------------------+")
+    print("|    Masculino     |       {:.2f}       |".format(dist))
+    print("|    Female        |       {:.2f}       |".format(dist))
+    print("+------------------+--------------------+")
+
+
+
+def print_percentagem_escalao(escaloes):
+    
+    print("+------------------+--------------------+")
+    print("|    Escalao        |    Percentagem    |")
+    print("+------------------+--------------------+")
+    print(f"|    [29..35]     |      {escaloes[0]}       |")
+    print(f"|    [34..40]     |      {escaloes[1]}        |")
+    print(f"|    [39..45]     |      {escaloes[2]}        |")
+    print(f"|    [44..50]     |      {escaloes[3]}        |")
+    print(f"|    [49..55]     |      {escaloes[4]}        |")
+    print(f"|    [54..60]     |      {escaloes[5]}        |")
+    print(f"|    [59..65]     |      {escaloes[6]}        |")
+    print(f"|    [64..70]     |      {escaloes[7]}        |")
+    print(f"|    [69..75]     |      {escaloes[8]}        |")
+    print(f"|    [74..80]     |       {escaloes[9]}       |")
+    print(f"|    [79..85]     |       {escaloes[10]}       |")    
+    print(f"|    [84..90]     |       {escaloes[11]}       |")                    
+    print("+------------------+--------------------+")
+
+
+
+def print_colesterol(dic1):
+      
+    print("+----------------------------+--------------------+")
+    print("|    Nível-Colesterol        |    Percentagem    |")
+    print("+----------------------------+---------------------+")
+    for x,i in enumerate(dic1):
+        print("|    {}..{}     |      {:.5f}       |".format(x*10,x*10+10,i))
+    print("+------------------+--------------------+")
+
+
+
+def menu():
+    lista = armazena()
+    print("Selecione a distribuição que quer ver:")
+    print("1. Distribuição da doença por sexo.")
+    print("2. Distruibuição por faixa etária.")
+    print("3. Distribuição por níveis de colesterol.")
+    entrada = input(">")
+    if entrada == "1":
+        dist = diseasePerSex(lista)
+        print_percentagem_sexo(dist)
+    elif entrada == "2":
+        total,escaloes = diseasePerTier(lista)
+        print_percentagem_escalao(escaloes)
+    elif entrada == "3":
+        total,escaloes = diseasePerTier(lista)
+        dic1 = diseasePerCholes(lista,total)
+        print_colesterol(dic1)
+    
+
+menu()
